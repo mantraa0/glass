@@ -1,0 +1,74 @@
+name: Build Windows installer
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    env:
+      BASE_URL: http://localhost:47613/
+      APP_TITLE: Glass
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: tauri
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Write build config
+        shell: bash
+        env:
+          # Optional repository secrets. Without them the app asks for api_id and api_hash on first launch
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+        run: |
+          {
+            echo "NODE_ENV=production"
+            echo "TELEGRAM_API_ID=$TELEGRAM_API_ID"
+            echo "TELEGRAM_API_HASH=$TELEGRAM_API_HASH"
+            echo "BASE_URL=$BASE_URL"
+            echo "APP_TITLE=$APP_TITLE"
+          } > .env
+
+      - name: Build web app
+        run: npm run build:production
+
+      - name: Trim build output
+        shell: bash
+        run: |
+          rm -f dist/build-stats.json
+          find dist -name '*.map' -delete
+
+      - name: Build installer
+        run: npx tauri build --bundles nsis
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Glass-windows-x64
+          path: tauri/target/release/bundle/nsis/*.exe
+          if-no-files-found: error
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: tauri/target/release/bundle/nsis/*.exe
+          generate_release_notes: true
