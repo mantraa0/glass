@@ -8,6 +8,7 @@ import type { TwoFaParams } from '../../../lib/gramjs/client/2fa';
 import TelegramClient from '../../../lib/gramjs/client/TelegramClient';
 import { RPCError } from '../../../lib/gramjs/errors';
 import { Logger as GramJsLogger } from '../../../lib/gramjs/extensions/index';
+import { setWsRouteConfig } from '../../../lib/gramjs/extensions/wsRoutes';
 
 import type { ThreadId } from '../../../types';
 import type {
@@ -103,8 +104,10 @@ export async function init(initialArgs: ApiInitialArgs, onConnected?: NoneToVoid
     userAgent, platform, sessionData, isWebmSupported, maxBufferSize, webAuthToken, dcId,
     shouldForceHttpTransport, shouldAllowHttpTransport,
     shouldDebugExportedSenders, langCode, isTestServerRequested, accountIds,
-    hasPasskeySupport, webAuthUserId,
+    hasPasskeySupport, webAuthUserId, apiId, apiHash, wsRouteConfig,
   } = initialArgs;
+
+  if (wsRouteConfig) setWsRouteConfig(wsRouteConfig);
 
   const session = new sessions.CallbackSession(sessionData, onSessionUpdate);
 
@@ -114,8 +117,8 @@ export async function init(initialArgs: ApiInitialArgs, onConnected?: NoneToVoid
 
   client = new TelegramClient(
     session,
-    TELEGRAM_API_ID,
-    TELEGRAM_API_HASH,
+    apiId || TELEGRAM_API_ID,
+    apiHash || TELEGRAM_API_HASH,
     {
       deviceModel: navigator.userAgent || userAgent || DEFAULT_USER_AGENT,
       systemVersion: platform || DEFAULT_PLATFORM,

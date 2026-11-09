@@ -11,6 +11,7 @@ import {
   selectWalletLocalOnlyNanos, selectWalletSavedWallets,
 } from '../../../global/selectors';
 import { formatTonShortFromNanos } from '../../../util/formatCurrency';
+import useGlassLang from '../../../util/glass/glassLang';
 import { formatTonAsIcon } from '../../../util/localization/format';
 import { pause } from '../../../util/schedulers';
 
@@ -61,6 +62,7 @@ const SettingsHeader = ({
   } = getActions();
 
   const lang = useLang();
+  const glassLang = useGlassLang();
   const { isMobile } = useAppLayout();
   const [isSignOutDialogOpen, setIsSignOutDialogOpen] = useState(false);
   const [isCheckingWallets, markCheckingWallets, unmarkCheckingWallets] = useFlag();
@@ -242,6 +244,10 @@ const SettingsHeader = ({
 
       case SettingsScreens.Performance:
         return <h3>{lang('MenuAnimations')}</h3>;
+      case SettingsScreens.Glass:
+        return <h3>{glassLang('MenuGlass')}</h3>;
+      case SettingsScreens.GlassProxy:
+        return <h3>{glassLang('MenuConnection')}</h3>;
 
       case SettingsScreens.ActiveSessions:
         return <h3>{lang('SessionsTitle')}</h3>;

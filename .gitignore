@@ -12,5 +12,10 @@ dev/perf/screenshot*
 .github/workflows/*
 !.github/workflows/package-and-publish.yml
 
+# Glass: local build output
+tauri/target/
+tauri/gen/
+tauri/permissions/
+
 # Built by CI
 dist/

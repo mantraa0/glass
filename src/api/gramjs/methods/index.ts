@@ -16,6 +16,8 @@ export {
 
 export * from './account';
 
+export * from './glass';
+
 export * from './chats';
 
 export * from './messages';

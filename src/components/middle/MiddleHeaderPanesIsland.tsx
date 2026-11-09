@@ -386,6 +386,7 @@ const MiddleHeaderPanesIsland = ({
         buildClassName(
           'MiddleHeaderPanesIsland',
           styles.root,
+          'glass-panes-island',
           className,
         )
       }

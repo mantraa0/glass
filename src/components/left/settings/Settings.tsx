@@ -30,6 +30,8 @@ import SettingsDataStorage from './SettingsDataStorage';
 import SettingsDoNotTranslate from './SettingsDoNotTranslate';
 import SettingsEditProfile from './SettingsEditProfile';
 import SettingsExperimental from './SettingsExperimental';
+import SettingsGlass from './SettingsGlass';
+import SettingsGlassProxy from './SettingsGlassProxy';
 import SettingsGeneral from './SettingsGeneral';
 import SettingsGeneralBackground from './SettingsGeneralBackground';
 import SettingsGeneralBackgroundColor from './SettingsGeneralBackgroundColor';
@@ -370,6 +372,14 @@ const Settings = ({
       case SettingsScreens.Experimental:
         return (
           <SettingsExperimental isActive={isScreenActive} onReset={handleReset} />
+        );
+      case SettingsScreens.Glass:
+        return (
+          <SettingsGlass isActive={isScreenActive} onReset={handleReset} />
+        );
+      case SettingsScreens.GlassProxy:
+        return (
+          <SettingsGlassProxy isActive={isScreenActive} onReset={handleReset} />
         );
       case SettingsScreens.GeneralChatBackground:
         return (

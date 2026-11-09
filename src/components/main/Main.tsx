@@ -563,6 +563,7 @@ const Main = ({
   }, [isMiddleColumnOpen, isRightColumnOpen, noRightColumnAnimation, forceUpdate]);
 
   const bgClassName = buildClassName(
+    'glass-wallpaper',
     !noRightColumnAnimation && backgroundStyles.withTransition,
   );
 

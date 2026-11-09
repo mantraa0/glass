@@ -220,6 +220,8 @@ function LeftColumn({
         case SettingsScreens.Language:
         case SettingsScreens.Stickers:
         case SettingsScreens.Experimental:
+        case SettingsScreens.Glass:
+        case SettingsScreens.GlassProxy:
           openSettingsScreen({ screen: SettingsScreens.Main });
           return;
 

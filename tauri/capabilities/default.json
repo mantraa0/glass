@@ -1,8 +1,10 @@
 {
   "identifier": "default",
-  "description": "Permissions available to Telegram app content",
+  "description": "Permissions available to the Glass web app",
   "local": true,
-  "webviews": ["*"],
+  "webviews": [
+    "*"
+  ],
   "permissions": [
     "allow-mark-title-bar-overlay",
     "allow-set-notifications-count",
@@ -19,5 +21,10 @@
     "notification:allow-notify",
     "notification:allow-request-permission",
     "shell:default"
-  ]
+  ],
+  "remote": {
+    "urls": [
+      "http://localhost:47613/*"
+    ]
+  }
 }

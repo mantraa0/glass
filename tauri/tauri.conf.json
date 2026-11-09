@@ -6,15 +6,16 @@
     }
   },
   "build": {
-    "beforeDevCommand": "npm run dev",
+    "frontendDist": "../dist",
     "devUrl": "http://localhost:1234",
-    "frontendDist": "http://localhost:1234",
     "removeUnusedCommands": true
   },
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": ["tg"]
+        "schemes": [
+          "tg"
+        ]
       }
     }
   },
@@ -22,7 +23,7 @@
     "active": true,
     "createUpdaterArtifacts": false,
     "category": "SocialNetworking",
-    "copyright": "Telegram Air",
+    "copyright": "GPL-3.0. Based on Telegram Web A; connection fallbacks from tg-ws-proxy (MIT)",
     "externalBin": [],
     "icon": [
       "icons/32x32.png",
@@ -40,19 +41,29 @@
       "signingIdentity": null
     },
     "resources": [],
-    "shortDescription": "",
+    "shortDescription": "Telegram client with liquid glass design",
     "targets": [
-      "app",
-      "nsis",
-      "appimage"
+      "nsis"
     ],
     "windows": {
       "digestAlgorithm": "sha256",
       "nsis": {
-        "installerIcon": "icons/icon.ico"
+        "installerIcon": "icons/icon.ico",
+        "installMode": "currentUser",
+        "languages": [
+          "Russian",
+          "English"
+        ],
+        "displayLanguageSelector": false
+      },
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper",
+        "silent": true
       }
-    }
+    },
+    "publisher": "Glass"
   },
-  "identifier": "org.telegram.TelegramAirBeta",
-  "productName": "Telegram Air"
+  "identifier": "app.glass.desktop",
+  "productName": "Glass",
+  "version": "0.1.0"
 }

@@ -3,6 +3,7 @@ import type { ThemeKey } from '../types';
 import { buildColor, mixColors, serializeColor } from '../lib/color';
 import { requestMutation } from '../lib/fasterdom/fasterdom';
 import themeColors from '../styles/themes.json';
+import { getGlassColorOverride } from './glass/glassSettings';
 import { animate } from './animation';
 import { convertSrgbChannel } from './colors.ts';
 
@@ -95,6 +96,11 @@ function applyColorAnimationStep(startIndex: number, endIndex: number, interpola
       space: 'srgb',
     });
     const [r, g, b] = color.coords.map(convertSrgbChannel);
+    const glassOverride = getGlassColorOverride(property);
+    if (glassOverride) {
+      document.documentElement.style.setProperty(property, glassOverride);
+      return;
+    }
 
     document.documentElement.style.setProperty(property, serializeColor(color, { format: 'rgb' }));
 

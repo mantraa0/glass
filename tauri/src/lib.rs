@@ -67,13 +67,17 @@ pub static LAST_URL: LazyLock<std::sync::Mutex<String>> =
 
 pub const DEFAULT_WINDOW_TITLE: &str = match std::option_env!("APP_TITLE") {
   Some(title) => title,
-  None => "Telegram Air",
+  None => "Glass",
 };
 
 pub const BASE_URL: &str = match std::option_env!("BASE_URL") {
   Some(url) => url,
-  None => "http://localhost:1234",
+  None => "http://localhost:47613/",
 };
+
+// The bundled web app is served from a fixed local port, so its origin and storage stay the same
+// between launches and features that need a real HTTP origin (service worker, media streaming) work
+pub const LOCALHOST_PORT: u16 = 47613;
 
 pub const WITH_UPDATER: &str = match std::option_env!("WITH_UPDATER") {
   Some(str) => str,
@@ -118,7 +122,8 @@ pub fn run() {
     .plugin(tauri_plugin_log::Builder::default().build())
     .plugin(tauri_plugin_window_state::Builder::default().build())
     .plugin(tauri_plugin_deep_link::init())
-    .plugin(tauri_plugin_process::init());
+    .plugin(tauri_plugin_process::init())
+    .plugin(tauri_plugin_localhost::Builder::new(LOCALHOST_PORT).build());
 
   let app = app.on_window_event(|window, event| match event {
     tauri::WindowEvent::CloseRequested { api, .. } => {
@@ -328,7 +333,7 @@ pub(crate) fn open_new_window(
   let new_window_builder = tauri::WebviewWindowBuilder::new(
     &app,
     window_label.clone(),
-    tauri::WebviewUrl::App(url.to_string().into()),
+    tauri::WebviewUrl::External(url.clone()),
   )
   .additional_browser_args("--autoplay-policy=no-user-gesture-required")
   .fullscreen(false)

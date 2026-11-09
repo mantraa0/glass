@@ -1,4 +1,5 @@
 import type { CallbackAction } from '../../global/types';
+import type { WsRouteConfig } from '../../lib/gramjs/extensions/wsRoutes';
 import type { IconName } from '../../types/icons';
 import type { AdvancedLangFnParameters, RegularLangFnParameters } from '../../util/localization';
 import type {
@@ -32,6 +33,9 @@ export interface ApiInitialArgs {
   isTestServerRequested?: boolean;
   accountIds?: string[];
   hasPasskeySupport?: boolean;
+  apiId?: number;
+  apiHash?: string;
+  wsRouteConfig?: Partial<WsRouteConfig>;
 }
 
 export type ApiPasskeyOption = {

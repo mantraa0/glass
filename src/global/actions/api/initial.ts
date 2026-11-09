@@ -6,6 +6,8 @@ import {
   MEDIA_CACHE_NAME,
   MEDIA_CACHE_NAME_AVATARS,
   MEDIA_PROGRESSIVE_CACHE_NAME,
+  TELEGRAM_API_HASH,
+  TELEGRAM_API_ID,
 } from '../../../config';
 import { updateAppBadge } from '../../../util/appBadge';
 import { MAIN_IDB_STORE } from '../../../util/browser/idb';
@@ -16,6 +18,9 @@ import {
 } from '../../../util/browser/windowEnvironment';
 import * as cacheApi from '../../../util/cacheApi';
 import { getCurrentTabId } from '../../../util/establishMultitabRole';
+import {
+  buildWsRouteConfig, getGlassApiCredentials, hasGlassApiCredentials,
+} from '../../../util/glass/glassSettings';
 import {
   ACCOUNT_SLOT, getAccountsInfo, getAccountSlotUrl, getFirstLoggedInAccountSlot,
 } from '../../../util/multiaccount';
@@ -94,6 +99,9 @@ addActionHandler('initApi', async (global, actions): Promise<void> => {
       .map(({ userId }) => userId)
       .filter(Boolean);
 
+    const glassCredentials = getGlassApiCredentials();
+    if (!hasGlassApiCredentials(TELEGRAM_API_ID, TELEGRAM_API_HASH)) return;
+
     void initApi(actions.apiUpdate, {
       userAgent: navigator.userAgent,
       platform: PLATFORM_ENV,
@@ -110,6 +118,9 @@ addActionHandler('initApi', async (global, actions): Promise<void> => {
       isTestServerRequested: hasTestParam,
       accountIds,
       hasPasskeySupport: IS_WEBAUTHN_SUPPORTED,
+      apiId: glassCredentials?.apiId,
+      apiHash: glassCredentials?.apiHash,
+      wsRouteConfig: buildWsRouteConfig(),
     });
 
     void setShouldEnableDebugLog(Boolean(shouldCollectDebugLogs));

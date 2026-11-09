@@ -167,7 +167,9 @@ export default defineConfig(({ mode }): UserConfig => {
   const shouldCollectWorkerReportBundles = bundleStatsVisualizerValue === '1' || bundleStatsValue === '1';
 
   if (appEnv !== 'test' && (!telegramApiId || !telegramApiHash)) {
-    throw new Error('Missing required Telegram API credentials');
+    // Credentials can also be entered on first launch, see `GlassApiSetup`
+    // eslint-disable-next-line no-console
+    console.warn('Telegram API credentials are not set: the app will ask for them on first launch');
   }
 
   setViteEnv({

@@ -11,6 +11,7 @@ import {
   selectIsPremiumPurchaseBlocked,
 } from '../../../global/selectors';
 import buildClassName from '../../../util/buildClassName';
+import useGlassLang from '../../../util/glass/glassLang';
 import { formatStarsAsIcon, formatTonAsIcon } from '../../../util/localization/format';
 
 import useFlag from '../../../hooks/useFlag';
@@ -63,6 +64,7 @@ const SettingsMain = ({
   const [isSupportDialogOpen, openSupportDialog, closeSupportDialog] = useFlag(false);
 
   const lang = useLang();
+  const glassLang = useGlassLang();
 
   useEffect(() => {
     if (currentUserId) {
@@ -164,6 +166,28 @@ const SettingsMain = ({
           >
             <span className="title">{lang('Filters')}</span>
             <span className="subtitle">{lang('SettingsFoldersDesc')}</span>
+          </ListItem>
+
+          <ListItem
+            icon="colorize"
+            iconBg="blue"
+            multiline
+            narrow
+            onClick={() => openSettingsScreen({ screen: SettingsScreens.Glass })}
+          >
+            <span className="title">{glassLang('MenuGlass')}</span>
+            <span className="subtitle">{glassLang('MenuGlassDesc')}</span>
+          </ListItem>
+
+          <ListItem
+            icon="web"
+            iconBg="green"
+            multiline
+            narrow
+            onClick={() => openSettingsScreen({ screen: SettingsScreens.GlassProxy })}
+          >
+            <span className="title">{glassLang('MenuConnection')}</span>
+            <span className="subtitle">{glassLang('MenuConnectionDesc')}</span>
           </ListItem>
 
           <ListItem

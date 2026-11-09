@@ -6,7 +6,7 @@ import type { ThemeKey } from '../types';
 import type { UiLoaderPage } from './common/UiLoader';
 
 import {
-  DARK_THEME_BG_COLOR, LIGHT_THEME_BG_COLOR, PAGE_TITLE, PAGE_TITLE_TAURI,
+  DARK_THEME_BG_COLOR, LIGHT_THEME_BG_COLOR, PAGE_TITLE, PAGE_TITLE_TAURI, TELEGRAM_API_HASH, TELEGRAM_API_ID,
 } from '../config';
 import { forceMutation } from '../lib/fasterdom/stricterdom.ts';
 import {
@@ -15,6 +15,7 @@ import {
 import { IS_TAURI } from '../util/browser/globalEnvironment';
 import { IS_INSTALL_PROMPT_SUPPORTED, PLATFORM_ENV } from '../util/browser/windowEnvironment';
 import buildClassName from '../util/buildClassName';
+import { hasGlassApiCredentials } from '../util/glass/glassSettings';
 import { setupBeforeInstallPrompt } from '../util/installPrompt';
 import { ACCOUNT_SLOT, getAccountSlotUrl, getFirstLoggedInAccountSlot } from '../util/multiaccount';
 import { hasLegacyEncryptedSession } from '../util/passcode';
@@ -35,6 +36,7 @@ import { useSignalEffect } from '../hooks/useSignalEffect';
 import { getIsInBackground } from '../hooks/window/useBackgroundMode';
 
 import Auth from './auth/Auth';
+import GlassApiSetup from './auth/GlassApiSetup';
 import Notifications from './common/Notifications';
 import UiLoader from './common/UiLoader';
 import AppInactive from './main/AppInactive';
@@ -66,6 +68,7 @@ enum AppScreens {
 
 const TRANSITION_RENDER_COUNT = Object.keys(AppScreens).length / 2;
 const ACTIVE_PAGE_TITLE = IS_TAURI ? PAGE_TITLE_TAURI : PAGE_TITLE;
+const IS_API_MISSING = !hasGlassApiCredentials(TELEGRAM_API_ID, TELEGRAM_API_HASH);
 
 const App = ({
   authState,
@@ -213,7 +216,7 @@ const App = ({
   function renderContent() {
     switch (activeKey) {
       case AppScreens.auth:
-        return <Auth />;
+        return IS_API_MISSING ? <GlassApiSetup /> : <Auth />;
       case AppScreens.main:
         return <Main isMobile={isMobile} />;
       case AppScreens.lock:

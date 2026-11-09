@@ -1,7 +1,7 @@
  [package]
-name = "telegram_air"
+name = "glass"
 version = "2.12.2"
-description = "Telegram Air"
+description = "Glass — Telegram client with liquid glass design"
 authors = ["Alexander Zinchuk"]
 license = "GPLv3"
 repository = "https://github.com/Ajaxy/telegram-tt"
@@ -32,6 +32,7 @@ image      = "0.25.10"
 imageproc  = "0.27.0"
 ab_glyph   = "0.2.32"
 tauri-plugin-os = "2.4.0"
+tauri-plugin-localhost = "2.4.0"
 
 [target."cfg(any(target_os = \"macos\", windows, target_os = \"linux\"))".dependencies]
 tauri-plugin-single-instance = { version = "2.5.2", features = ["deep-link"] }

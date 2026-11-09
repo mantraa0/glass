@@ -1,6 +1,9 @@
 import { Mutex } from 'async-mutex';
 
 import { concat } from '../../../util/encoding/buffer';
+import {
+  buildWsRouteCandidates, getWsAttemptTimeout, reportWsRouteFailure, reportWsRouteSuccess,
+} from './wsRoutes';
 
 const closeError = new Error('WebSocket was closed');
 const CONNECTION_TIMEOUT = 3000;
@@ -78,37 +81,52 @@ export default class PromisedWebSockets {
     return toReturn;
   }
 
-  getWebSocketLink(ip: string, port: number, isTestServer?: boolean, isPremium?: boolean) {
-    if (port === 443) {
-      return `wss://${ip}:${port}/apiws${isTestServer ? '_test' : ''}${isPremium ? '_premium' : ''}`;
-    } else {
-      return `ws://${ip}:${port}/apiws${isTestServer ? '_test' : ''}${isPremium ? '_premium' : ''}`;
+  async connect(port: number, ip: string, isTestServer = false, isPremium = false) {
+    const path = `/apiws${isTestServer ? '_test' : ''}${isPremium ? '_premium' : ''}`;
+    const candidates = buildWsRouteCandidates(ip, port, path);
+    let lastError: unknown;
+
+    for (const candidate of candidates) {
+      const startedAt = performance.now();
+      try {
+        await this.connectToUrl(candidate.url, ip, candidates.length > 1);
+        reportWsRouteSuccess(ip, candidate, performance.now() - startedAt);
+        return this;
+      } catch (err) {
+        lastError = err;
+        reportWsRouteFailure(ip, candidate);
+      }
     }
+
+    throw lastError;
   }
 
-  connect(port: number, ip: string, isTestServer = false, isPremium = false) {
+  private connectToUrl(url: string, ip: string, hasFallbacks: boolean) {
     this.stream = new Uint8Array(0);
     this.canRead = new Promise((resolve) => {
       this.resolveRead = resolve;
     });
     this.closed = false;
-    this.website = this.getWebSocketLink(ip, port, isTestServer, isPremium);
+    this.website = url;
     this.client = new WebSocket(this.website, 'binary');
     this.client.binaryType = 'arraybuffer';
+    const client = this.client;
+    const attemptTimeout = hasFallbacks ? Math.max(this.timeout, getWsAttemptTimeout()) : this.timeout;
 
     return new Promise((resolve, reject) => {
-      if (!this.client) return;
       let hasResolved = false;
+      let isOpen = false;
       let timeout: ReturnType<typeof globalThis.setTimeout> | undefined;
 
-      this.client.onopen = () => {
+      client.onopen = () => {
+        isOpen = true;
         this.receive();
         resolve(this);
         hasResolved = true;
         if (timeout) clearTimeout(timeout);
       };
 
-      this.client.onerror = (error) => {
+      client.onerror = (error) => {
         // eslint-disable-next-line no-console
         console.error('WebSocket error', error);
         reject(error);
@@ -116,11 +134,19 @@ export default class PromisedWebSockets {
         if (timeout) clearTimeout(timeout);
       };
 
-      this.client.onclose = (event) => {
+      client.onclose = (event) => {
         const { code, reason, wasClean } = event;
         if (code !== 1000) {
           // eslint-disable-next-line no-console
           console.error(`Socket ${ip} closed. Code: ${code}, reason: ${reason}, was clean: ${wasClean}`);
+        }
+
+        if (!isOpen) {
+          // A failed attempt does not tear down the connection: the next route is tried instead
+          reject(new Error('WebSocket closed before opening'));
+          hasResolved = true;
+          if (timeout) clearTimeout(timeout);
+          return;
         }
 
         this.resolveRead?.(false);
@@ -136,16 +162,20 @@ export default class PromisedWebSockets {
         if (hasResolved) return;
 
         reject(new Error('WebSocket connection timeout'));
-        this.resolveRead?.(false);
-        this.closed = true;
-        if (this.disconnectedCallback) {
-          this.disconnectedCallback();
+        // eslint-disable-next-line no-null/no-null
+        client.onclose = null;
+        client.close();
+        if (!hasFallbacks) {
+          this.resolveRead?.(false);
+          this.closed = true;
+          if (this.disconnectedCallback) {
+            this.disconnectedCallback();
+          }
         }
-        this.client?.close();
         this.timeout *= 2;
         this.timeout = Math.min(this.timeout, MAX_TIMEOUT);
         timeout = undefined;
-      }, this.timeout);
+      }, attemptTimeout);
 
       // CONTEST
       // Seems to not be working, at least in a web worker

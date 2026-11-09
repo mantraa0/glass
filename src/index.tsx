@@ -25,6 +25,7 @@ import { initGlobal } from './util/init';
 import { initLocalization } from './util/localization';
 import { Bundles, loadBundle } from './util/moduleLoader';
 import { MULTITAB_STORAGE_KEY } from './util/multiaccount';
+import { applyGlassAppearance, refreshCfDomains } from './util/glass/glassSettings';
 import { getDek, getDekGeneration } from './util/passcode';
 import { initAutolock } from './util/passcode/autolock';
 import { subscribeToPasscodeChannel } from './util/passcode/channel';
@@ -48,6 +49,9 @@ if (IS_TAURI) {
   initTauriApi();
   setupTauriListeners();
 }
+
+applyGlassAppearance();
+void refreshCfDomains();
 
 const initializationPromise = init();
 
