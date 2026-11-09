@@ -19,3 +19,4 @@ tauri/permissions/
 
 # Built by CI
 dist/
+public/build-stats.json
