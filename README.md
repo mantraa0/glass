@@ -9,7 +9,7 @@
 ![Tauri](https://img.shields.io/badge/Tauri-2-24C8DB?logo=tauri&logoColor=white)
 ![License](https://img.shields.io/badge/license-GPL--3.0-8774E1)
 
-**[Скачать](#установка)** · **[Возможности](#возможности)** · **[Подключение](#подключение-и-обход-блокировок)** · **[Сборка](#сборка)**
+**[Скачать](https://github.com/mantraa0/glass/releases/latest)** · **[Возможности](#возможности)** · **[Подключение](#подключение-и-обход-блокировок)** · **[Сборка](#сборка)**
 
 </div>
 
@@ -50,8 +50,8 @@
 
 ## Установка
 
-1. Откройте [последнюю сборку](https://github.com/mantraa0/glass/actions/workflows/build-windows.yml) и скачайте артефакт **Glass-windows-x64**. Версии с тегом `v*` выкладываются в [Releases](https://github.com/mantraa0/glass/releases).
-2. Запустите `Glass_x.y.z_x64-setup.exe`. Права администратора не нужны.
+1. Скачайте **Glass_x.y.z_x64-setup.exe** из [последнего релиза](https://github.com/mantraa0/glass/releases/latest). Сборки после каждого изменения лежат в [Actions](https://github.com/mantraa0/glass/actions/workflows/build-windows.yml) (артефакт **Glass-windows-x64**).
+2. Запустите установщик. Права администратора не нужны.
 3. Установщик пока не подписан, поэтому Windows SmartScreen предупредит о нём: нажмите **Подробнее → Выполнить в любом случае**.
 
 <img src="docs/glass/first-run.png" alt="Первый запуск" align="right" width="360">
@@ -86,7 +86,7 @@ kws{N}.<ваш домен>           ← Cloudflare-прокси (свои и п
 
 ## Сборка
 
-Установщик собирается в GitHub Actions на `windows-latest` при каждом пуше в `main`. Чтобы вшить ключи в свою сборку, добавьте секреты репозитория `TELEGRAM_API_ID` и `TELEGRAM_API_HASH`. Делайте так только для личных сборок: ключи попадут в код приложения.
+Установщик собирается в GitHub Actions на `windows-latest` при каждом пуше в `main`. Когда в `tauri/tauri.conf.json` появляется новая `version`, сборка сама публикует релиз `v<версия>` с установщиком. Чтобы вшить ключи в свою сборку, добавьте секреты репозитория `TELEGRAM_API_ID` и `TELEGRAM_API_HASH`. Делайте так только для личных сборок: ключи попадут в код приложения.
 
 Локально на Windows (Node.js 24, Rust stable):
 
