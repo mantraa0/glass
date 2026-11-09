@@ -61,9 +61,10 @@
         "silent": true
       }
     },
-    "publisher": "Glass"
+    "publisher": "Telegram GLS"
   },
-  "identifier": "app.glass.desktop",
-  "productName": "Glass",
-  "version": "0.1.0"
+  "identifier": "app.telegramgls.desktop",
+  "productName": "Telegram GLS",
+  "version": "0.2.0",
+  "mainBinaryName": "Telegram GLS"
 }

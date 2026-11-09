@@ -1757,36 +1757,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "37bfe73dc8ec21f54d181e5a60554327ec3f1c600c455a75ccbfc65d2106a6c4"
 
 [[package]]
-name = "glass"
-version = "2.12.2"
-dependencies = [
- "ab_glyph",
- "cocoa",
- "image",
- "imageproc",
- "log",
- "objc",
- "rand 0.10.3",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-deep-link",
- "tauri-plugin-fs",
- "tauri-plugin-localhost",
- "tauri-plugin-log",
- "tauri-plugin-notification",
- "tauri-plugin-os",
- "tauri-plugin-process",
- "tauri-plugin-shell",
- "tauri-plugin-single-instance",
- "tauri-plugin-updater",
- "tauri-plugin-window-state",
- "url",
- "uuid",
-]
-
-[[package]]
 name = "glib"
 version = "0.18.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5424,6 +5394,36 @@ dependencies = [
  "thiserror 2.0.21",
  "windows",
  "windows-version",
+]
+
+[[package]]
+name = "telegram-gls"
+version = "2.12.2"
+dependencies = [
+ "ab_glyph",
+ "cocoa",
+ "image",
+ "imageproc",
+ "log",
+ "objc",
+ "rand 0.10.3",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-deep-link",
+ "tauri-plugin-fs",
+ "tauri-plugin-localhost",
+ "tauri-plugin-log",
+ "tauri-plugin-notification",
+ "tauri-plugin-os",
+ "tauri-plugin-process",
+ "tauri-plugin-shell",
+ "tauri-plugin-single-instance",
+ "tauri-plugin-updater",
+ "tauri-plugin-window-state",
+ "url",
+ "uuid",
 ]
 
 [[package]]

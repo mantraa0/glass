@@ -3,7 +3,7 @@ import useLang from '../../hooks/useLang';
 // Strings of Glass-only screens. They are not part of Telegram's translation platform,
 // so Russian and English are bundled here and other languages fall back to English.
 const EN = {
-  MenuGlass: 'Glass appearance',
+  MenuGlass: 'GLS appearance',
   MenuGlassDesc: 'Liquid glass, blur, accent, backdrop',
   MenuConnection: 'Connection',
   MenuConnectionDesc: 'Built-in WS proxy and fallbacks',
@@ -65,7 +65,7 @@ const EN = {
   ProxyApplied: 'New connections use these settings',
   ProxyRefresh: 'Refresh',
   ProxyCredits: 'Routes are ported from tg-ws-proxy by Flowseal (MIT).',
-  ApiTitle: 'Connect Glass to Telegram',
+  ApiTitle: 'Connect Telegram GLS',
   ApiDesc: 'Every Telegram client needs its own api_id and api_hash. '
     + 'Get them for free at my.telegram.org → API development tools. They are stored only on this computer.',
   ApiId: 'api_id',
@@ -77,7 +77,7 @@ const EN = {
 };
 
 const RU: typeof EN = {
-  MenuGlass: 'Оформление Glass',
+  MenuGlass: 'Оформление GLS',
   MenuGlassDesc: 'Стекло, размытие, акцент, фон',
   MenuConnection: 'Подключение',
   MenuConnectionDesc: 'Встроенный WS-прокси и запасные маршруты',
@@ -140,7 +140,7 @@ const RU: typeof EN = {
   ProxyApplied: 'Новые соединения используют эти настройки',
   ProxyRefresh: 'Обновить',
   ProxyCredits: 'Маршруты перенесены из tg-ws-proxy от Flowseal (MIT).',
-  ApiTitle: 'Подключение Glass к Telegram',
+  ApiTitle: 'Подключение Telegram GLS',
   ApiDesc: 'Каждому клиенту Telegram нужны свои api_id и api_hash. '
     + 'Получить их бесплатно можно на my.telegram.org → API development tools. '
     + 'Они хранятся только на этом компьютере.',
